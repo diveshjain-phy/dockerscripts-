@@ -1,0 +1,24 @@
+# Python 3.9 enviroment loading
+FROM python:3.9
+
+# This will be the working directory needs to be tested
+WORKDIR /app
+
+# add a user! check thsi ome
+RUN useradd -ms /bin/bash jupyter
+
+COPY . .
+
+# necessary dependencies
+RUN apt-get update && apt-get install -y libfftw3-dev gfortran bash gedit xauth
+RUN pip install numpy jupyter matplotlib scipy
+
+
+# installation and setup
+RUN python setup.py install
+RUN chown -R jupyter:jupyter /app
+ENV SHELL=/bin/bash
+USER jupyter
+
+# Set entrypoint
+CMD ["bash"]
